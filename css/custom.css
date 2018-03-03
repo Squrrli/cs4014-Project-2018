@@ -35,4 +35,8 @@
 /*button style*/
 #bt-login, #bt-register{
 	 box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+	 font-weight: 600;
+}
+#bt-login:hover{
+	background-color: #d1d1d1;
 }
