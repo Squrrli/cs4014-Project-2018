@@ -52,7 +52,7 @@ class Database
     {
         $this->connection->close();
     }
-    public function add_user($values)
+    public function add_user($values, $user_id_for_log)
     {
         $DOB = $values[0];
         $name = $values[1];
@@ -79,22 +79,24 @@ class Database
         $sql = "INSERT INTO User ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add user");
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_user($values)
+    public function remove_user($values, $user_id_for_log)
     {
         $id = $values[0];
         if (!$this->validator->validate_id($id)) {return [false, "invalid id"];}
         $sql = "DELETE FROM User WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove user", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function update_user($values)
+    public function update_user($values, $user_id_for_log)
     {
         $DOB = $values[0];
         $name = $values[1];
@@ -122,6 +124,7 @@ class Database
         $sql .= "email='$email', password='$password', loc_country=$loc_country, loc_city=$loc_city, admin=$admin 'WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "update user", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -144,11 +147,13 @@ class Database
         $password = $values[0];
         if (!$this->validator->validate_email($email)) {return [false, "invalid email"];}
         if (!$this->validator->validate_password($password)) {return [false, "invalid password"];}
-        $sql = "SELECT * FROM User WHERE email='$email', password='$password''";
+        $sql = "SELECT * FROM User WHERE email='$email', password='$password'";
         $result = $this->connection->query($sql);
         if ($result->num_rows == 1)
         {
-            return [true, $result->fetch_assoc()];
+            $to_return = $result->fetch_assoc();
+            $this->add_log($to_return["id"], "login");
+            return [true, $to_return];
         }
         return [false, "no result for this email and password"];
     }
@@ -193,10 +198,8 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function get_countries($values)
+    public function get_countries()
     {
-        $id = $values[0];
-        if (!$this->validator->validate_id($id)) {return [false, "invalid id"];}
         $sql = "SELECT * FROM Country";
         $result = $this->connection->query($sql);
         if ($result->num_rows > 1)
@@ -210,7 +213,7 @@ class Database
         }
         return [false, "no results"];
     }
-    public function add_employment($values)
+    public function add_employment($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $date_start = $values[1];
@@ -232,22 +235,24 @@ class Database
         $sql = "INSERT INTO Employment ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add employment");
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_employment($values)
+    public function remove_employment($values, $user_id_for_log)
     {
         $id = $values[0];
         if (!$this->validator->validate_id($id)) {return [false, "invalid id"];}
         $sql = "DELETE FROM Employment WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove employment", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function update_employment($values)
+    public function update_employment($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $date_start = $values[1];
@@ -269,6 +274,7 @@ class Database
         $sql .= "organisation_name='$organisation_name', organisation_id='$organisation_id', vacancy_name=$vacancy_name, 'WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "update employment", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -290,7 +296,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function add_message($values)
+    public function add_message($values, $user_id_for_log)
     {
         $user1_id = $values[0];
         $user2_id = $values[1];
@@ -304,6 +310,7 @@ class Database
         $sql = "INSERT INTO Message ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add message");
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -325,7 +332,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function add_organisation($values)
+    public function add_organisation($values, $user_id_for_log)
     {
         $name = $values[0];
         $description = $values[1];
@@ -336,22 +343,24 @@ class Database
         $sql = "INSERT INTO Organisation ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add organisation");
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_organisation($values)
+    public function remove_organisation($values, $user_id_for_log)
     {
         $id = $values[0];
         if (!$this->validator->validate_id($id)) {return [false, "invalid id"];}
         $sql = "DELETE FROM Organisation WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove organisation", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function update_organisation($values)
+    public function update_organisation($values, $user_id_for_log)
     {
         $name = $values[0];
         $description = $values[1];
@@ -362,6 +371,7 @@ class Database
         $sql = "UPDATE Organisation SET name='$name', description='$description' WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "update organisation", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -378,7 +388,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function add_qualification($values)
+    public function add_qualification($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $date_start = $values[1];
@@ -398,22 +408,24 @@ class Database
         $sql = "INSERT INTO Qualification ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add qualification");
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_qualification($values)
+    public function remove_qualification($values, $user_id_for_log)
     {
         $id = $values[0];
         if (!$this->validator->validate_id($id)) {return [false, "invalid id"];}
         $sql = "DELETE FROM Qualification WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove qualification", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function update_qualification($values)
+    public function update_qualification($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $date_start = $values[1];
@@ -433,6 +445,7 @@ class Database
         $sql .= "name='$name', description='$description', type='$type' WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "update qualification", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -481,7 +494,7 @@ class Database
         }
         return [false, "no results"];
     }
-    public function add_user_organisation($values)
+    public function add_user_organisation($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $organisation_id = $values[1];
@@ -494,11 +507,12 @@ class Database
         $sql = "INSERT INTO user_organisation ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add user_organisation");
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_user_organisation($values)
+    public function remove_user_organisation($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $organisation_id = $values[1];
@@ -507,11 +521,12 @@ class Database
         $sql = "DELETE FROM user_organisation WHERE user_id=$user_id AND organisation_id=$organisation_id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove user_organisation (org_id)", $organisation_id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function change_rights($values)
+    public function change_rights($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $organisation_id = $values[1];
@@ -522,6 +537,7 @@ class Database
         $sql = "UPDATE user_organisation SET rights=$rights WHERE user_id=$user_id AND organisation_id=$organisation_id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "change rights(org_id)", $organisation_id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -560,7 +576,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function add_user_user($values)
+    public function add_user_user($values, $user_id_for_log)
     {
         $user1_id = $values[0];
         $user2_id = $values[1];
@@ -572,11 +588,12 @@ class Database
         $sql = "INSERT INTO user_user ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add user_user", $user2_id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_user_user($values)
+    public function remove_user_user($values, $user_id_for_log)
     {
         $id1 = $values[0];
         $id2 = $values[1];
@@ -585,6 +602,7 @@ class Database
         $sql = "DELETE FROM user_user WHERE (user1_id=$id1 AND user2_id=$id2) OR (user1_id=$id2 AND user2_id=$id1)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove user_user", $id2);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -606,7 +624,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function add_user_skill($values)
+    public function add_user_skill($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $skill_id = $values[1];
@@ -617,11 +635,12 @@ class Database
         $sql = "INSERT INTO user_skill ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add user_skill(sk_id)", $skill_id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_user_skill($values)
+    public function remove_user_skill($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $skill_id = $values[1];
@@ -630,6 +649,7 @@ class Database
         $sql = "DELETE FROM user_skill WHERE user_id=$user_id AND skill_id=$skill_id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove user_skill(sk_id)", $skill_id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -651,7 +671,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function add_vacancy($values)
+    public function add_vacancy($values, $user_id_for_log)
     {
         $organisation_id = $values[0];
         $name = $values[1];
@@ -668,22 +688,24 @@ class Database
         $sql = "INSERT INTO Vacancy ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add vacancy(org_id)", $organisation_id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_vacancy($values)
+    public function remove_vacancy($values, $user_id_for_log)
     {
         $id = $values[0];
         if (!$this->validator->validate_id($id)) {return [false, "invalid id"];}
         $sql = "DELETE FROM Vacancy WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove vacancy", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function update_vacancy($values)
+    public function update_vacancy($values, $user_id_for_log)
     {
         $organisation_id = $values[0];
         $name = $values[1];
@@ -698,6 +720,7 @@ class Database
         $sql = "UPDATE Vacancy SET name='$name', organisation_id=$organisation_id, city_id=$city_id, description='$description' WHERE id=$id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "update vacancy", $id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -731,7 +754,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function add_vacancy_skill($values)
+    public function add_vacancy_skill($values, $user_id_for_log)
     {
         $vacancy_id = $values[0];
         $skill_id = $values[1];
@@ -745,11 +768,12 @@ class Database
         $sql = "INSERT INTO vacancy_skill ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add vacancy_skill(v_id)", $vacancy_id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_vacancy_skill($values)
+    public function remove_vacancy_skill($values, $user_id_for_log)
     {
         $vacancy_id = $values[0];
         $skill_id = $values[1];
@@ -758,6 +782,7 @@ class Database
         $sql = "DELETE FROM vacancy_skill WHERE vacancy_id=$vacancy_id AND skill_id=$skill_id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove vacancy_skill(v_id)", $vacancy_id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -779,7 +804,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    public function change_required($values)
+    public function change_required($values, $user_id_for_log)
     {
         $vacancy_id = $values[0];
         $skill_id = $values[1];
@@ -791,11 +816,12 @@ class Database
         $sql = "UPDATE vacancy_skill SET required=$required WHERE vacancy_id=$vacancy_id AND skill_id=$skill_id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "change required(v_id)", $vacancy_id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function add_vacancy_user($values)
+    public function add_vacancy_user($values, $user_id_for_log)
     {
         $vacancy_id = $values[0];
         $user_id = $values[1];
@@ -807,11 +833,12 @@ class Database
         $sql = "INSERT INTO vacancy_user ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "add vacancy_user(v_id)", $vacancy_id);
             return [true, null];
         }
         return [false, $this->connection->error];
     }
-    public function remove_vacancy_user($values)
+    public function remove_vacancy_user($values, $user_id_for_log)
     {
         $user_id = $values[0];
         $vacancy_id = $values[1];
@@ -820,6 +847,7 @@ class Database
         $sql = "DELETE FROM user_vacancy WHERE user_id=$user_id AND vacancy_id=$vacancy_id";
         if ($this->connection->query($sql) === TRUE)
         {
+            $this->add_log($user_id_for_log, "remove vacancy_user(v_id)", $vacancy_id);
             return [true, null];
         }
         return [false, $this->connection->error];
@@ -858,5 +886,14 @@ class Database
         }
         return [false, "no result for this id"];
     }
-
+    private function add_log($user_id, $action_type, $operated_on_id=null)
+    {
+        if (!$this->validator->validate_id($user_id)) {return [false, "invalid user1 id"];}
+        if (!$this->validator->validate_id($action_type)) {return [false, "invalid user2 id"];}
+        if (!$this->validator->validate_text($operated_on_id)) {return [false, "invalid text"];}
+        $var_names = "user_id, action_type, operated_on_id";
+        $var_values = "$user_id, '$action_type', '$operated_on_id'";
+        $sql = "INSERT INTO Log ($var_names) VALUES ($var_values)";
+        $this->connection->query($sql);
+    }
 }
