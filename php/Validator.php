@@ -65,12 +65,12 @@ class Validator
     {
         return (is_numeric($value)) && (0 < $value && $value < 10);
     }
-    function validate_email($value)
+    public function validate_email($value)
     {
         $pattern = "/^[a-zA-Z0-9]{1,50}@[a-zA-Z0-9]{1,20}+\.[a-z]{2,}$/";
         return boolval(preg_match($pattern, $value));
     }
-    function validate_password($value)
+    public function validate_password($value)
     {
         $pattern = "/.{1,20}/";
         return boolval(preg_match($pattern, $value));
