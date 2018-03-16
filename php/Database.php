@@ -147,7 +147,7 @@ class Database
         $password = $values[0];
         if (!$this->validator->validate_email($email)) {return [false, "invalid email"];}
         if (!$this->validator->validate_password($password)) {return [false, "invalid password"];}
-        $sql = "SELECT * FROM User WHERE email='$email', password='$password'";
+        $sql = "SELECT * FROM User WHERE email='$email' AND password='$password'";
         $result = $this->connection->query($sql);
         if ($result->num_rows == 1)
         {
