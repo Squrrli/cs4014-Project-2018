@@ -3,9 +3,11 @@
  * All contacts to database will be made with this class
  * Functions either return [True, $some_data] either [False, $error_message]
  */
+require('Validator.php');
+
 class Database
 {
-    private $filename = "php/DatabaseInfo";
+    private $filename = "DatabaseInfo";
     private $amount_of_rows_in_file = 4;
     private $name;
     private $login;
@@ -13,13 +15,13 @@ class Database
     private $hostname;
     private $connection;
     private $validator;
-    function __construct()
+    function __construct()   //__construct
     {
         $this->read_database_info();
         $this->connect();
         $this->validator = new Validator();
-    }
-    function __destruct()
+    }   
+    function __destruct()    //__destruct
     {
         $this->disconnect();
     }
@@ -144,7 +146,7 @@ class Database
     public function login($values)
     {
         $email = $values[0];
-        $password = $values[0];
+        $password = $values[1];
         if (!$this->validator->validate_email($email)) {return [false, "invalid email"];}
         if (!$this->validator->validate_password($password)) {return [false, "invalid password"];}
         $sql = "SELECT * FROM User WHERE email='$email' AND password='$password'";
@@ -201,7 +203,13 @@ class Database
     public function get_countries()
     {
         $sql = "SELECT * FROM Country";
+       
+
+        //Fatal error: call to member fuction query() on null
         $result = $this->connection->query($sql);
+       
+
+
         if ($result->num_rows > 1)
         {
             $results = [];
@@ -897,3 +905,8 @@ class Database
         $this->connection->query($sql);
     }
 }
+
+
+//$db = new Database();
+
+?>

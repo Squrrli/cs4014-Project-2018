@@ -12,6 +12,24 @@
 	<body>
 		<!-- bg-home sets background img to whole page -->
 		<div class="container-fluid bg-home">
+
+			<!--	Login in form  -->
+				<div class="form-row" id="login">
+					<div class="col-sm-12">
+						<form class="form-inline" method="POST" action="php/login.php">	
+							<div class="form-group">
+								<input type="email" name="em" class="form-control" placeholder="Email">
+							</div>
+							<div class="form-group">
+								<input type="password" name="pw" class="form-control" placeholder="Password">
+							</div>
+							
+								<button id="bt-login" class="btn btn-default">Login</button>
+						</form>
+					</div>
+				</div>
+	
+
 				<!-- Decription of website -->
 				<div class="row">
 					<div class="col-sm-12 content-center">
@@ -21,26 +39,49 @@
 						</div>
 					</div>
 				</div>
-				<!-- Link to listed jobs -->
-				<div class="row">
-					<div class="col-sm-12 content-center">
-						<a style="color: black; font-weight: bold;" href="#" id="job-link">CLICK HERE TO VIEW LISTED JOBS</a>
-					</div>
-				</div>
-				<!-- class=content-center centers buttons -->
-				<div class="row content-center" id="buttons"> 
-					<div class="col-sm-2 content-center">
-						<button type="button" class="btn btn-primary btn-block" id="bt-register">Register</button>
-					</div>
-					<div class="col-sm-2 content-center">
-						<button type="button" class="btn btn-block" id="bt-login">Login</button>
-					</div>
-				</div>
-				<div class="row"><hr></div>
-				<!-- Footer -->
-				
-		</div>
+							<!-- Register form -->
 
+				<div class="row content-center" id="register"> 
+					<div class="col-sm-4">						
+						<form class="form">	
+							<!-- name -->
+							<div class="form-row content-center">
+								<div class="col-sm-6">
+									<input type="text" name="firstname" class="form-control" placeholder="Firstname">
+								</div>
+								<div class="col-sm-6">
+									<input type="text" name="surname" class="form-control" placeholder="Surname">
+								</div>
+							</div>
+
+							<!-- Gender, DOB -->
+							<div class="form-row">
+								<div class="col-sm-3">
+									<select class="form-control" name="gender" placeholder="Gender">
+									    <option>Male</option>
+									    <option>Female</option>
+									    <option>Other</option>
+									</select>
+								</div>
+								
+								<div class='col-sm-6'>
+							        
+							    </div>
+							</div>
+
+						</form>
+
+						<div class="col-sm-2 content-center">
+							<button type="button" class="btn btn-primary btn-block" id="bt-register">Register</button>
+						</div>
+
+					</div>
+				</div>
+				
+	
+	
+
+		</div>
 
 	</body>
 </html>

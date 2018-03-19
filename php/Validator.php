@@ -1,13 +1,13 @@
 <?php
 class Validator
 {
-    function validate_id($value)
+    public function validate_id($value)
     {
         $id_lower_limit = 0;
         $id_upper_limit = 10000;
         return (is_numeric($value)) && ($id_lower_limit < $value && $value < $id_upper_limit);
     }
-    function validate_date($value)
+    public function validate_date($value)
     {
         $value_list = explode("-", $value);
         # TODO move numbers here <--
@@ -32,36 +32,36 @@ class Validator
         return true;
 
     }
-    function validate_name($value)
+    public function validate_name($value)
     {
         $pattern = "/^[a-zA-Z]{1,50}$/";
         return boolval(preg_match($pattern, $value));
     }
-    function validate_type($value)
+    public function validate_type($value)
     {
         $pattern = "/^[a-zA-Z]{1,20}$/";
         return boolval(preg_match($pattern, $value));
     }
-    function validate_admin($value)
+    public function validate_admin($value)
     {
         return is_bool($value);
     }
-    function validate_timestamp($value)
+    public function validate_timestamp($value)
     {
         # TODO complete function!
         return true;
     }
-    function validate_description($value)
+    public function validate_description($value)
     {
         $pattern = "/^.{1,1000}$/";
         return boolval(preg_match($pattern, $value));
     }
-    function validate_text($value)
+    public function validate_text($value)
     {
         $pattern = "/^.{1,5000}$/";
         return boolval(preg_match($pattern, $value));
     }
-    function validate_code($value)
+    public function validate_code($value)
     {
         return (is_numeric($value)) && (0 < $value && $value < 10);
     }

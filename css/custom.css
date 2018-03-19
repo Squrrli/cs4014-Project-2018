@@ -17,8 +17,7 @@
 	height: 100vh;
 	background-image: linear-gradient(
       to top right, 
-      red, #f06d06
-    );
+      blue, aqua    );
 }
 .content-center{
 	display: flex;
@@ -40,4 +39,20 @@
 	 box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 	 font-weight: 600;
 	 margin: 0;
+}
+.job-card{
+	min-height: 10vh;
+}
+.refine-critera{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.user-card{
+	margin: 10px, 5px;
+}
+#experience{
+	max-height: 30vh;
+}
+.exp-card{
+	margin-bottom: 10px;
 }
