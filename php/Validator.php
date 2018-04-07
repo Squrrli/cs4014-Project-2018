@@ -31,7 +31,7 @@ class Validator
         {
             return 0;
         }
-        if ($value_list[0] > 3000 || $value_list[0] < 1000|| !$this->validate_id($value_list[3]))
+        if ($value_list[0] > 3000 || $value_list[0] < 1000|| !$this->validate_id($value_list[0]))
         {
             return 0;
         }
