@@ -15,23 +15,25 @@ class Database
     private $hostname;
     private $connection;
     private $validator;
-    function __construct()   //__construct
+    function __construct()
     {
         $this->read_database_info();
         $this->connect();
         $this->validator = new Validator();
     }   
-    function __destruct()    //__destruct
+    function __destruct()
     {
         $this->disconnect();
     }
     private function read_database_info()
     {
-        if (!file_exists($this->filename)) {
+        if (!file_exists($this->filename))
+        {
             die("database file doesn't exist.");
         }
         $lines_of_file = file($this->filename);
-        foreach ($lines_of_file as &$line_of_file) {
+        foreach ($lines_of_file as &$line_of_file)
+        {
             $line_of_file = trim($line_of_file);
         }
         if (sizeof($lines_of_file) != $this->amount_of_rows_in_file) {
@@ -46,7 +48,8 @@ class Database
     {
         $this->connection = new mysqli($this->hostname, $this->login, $this->password, $this->name);
 
-        if ($this->connection->connect_error) {
+        if ($this->connection->connect_error)
+        {
             die("Connection failed: " . $this->connection->connect_error);
         }
     }
@@ -54,7 +57,7 @@ class Database
     {
         $this->connection->close();
     }
-    public function add_user($values, $user_id_for_log)
+    public function add_user($values)
     {
         $DOB = $values[0];
         $name = $values[1];
@@ -81,13 +84,13 @@ class Database
         $sql = "INSERT INTO User ($var_names) VALUES ($var_values)";
         if ($this->connection->query($sql) === TRUE)
         {
-            $this->add_log($user_id_for_log, "add user");
             return [true, null];
         }
         return [false, $this->connection->error];
     }
     public function remove_user($values, $user_id_for_log)
     {
+        # TODO this function returns true even if such user doesn't exist
         $id = $values[0];
         if (!$this->validator->validate_id($id)) {return [false, "invalid id"];}
         $sql = "DELETE FROM User WHERE id=$id";
@@ -98,6 +101,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function update_user($values, $user_id_for_log)
     {
         $DOB = $values[0];
@@ -171,6 +175,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function get_cities_by_country_id($values)
     {
         $country_id = $values[0];
@@ -188,6 +193,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function get_country($values)
     {
         $id = $values[0];
@@ -200,6 +206,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function get_countries()
     {
         $sql = "SELECT * FROM Country";
@@ -221,6 +228,7 @@ class Database
         }
         return [false, "no results"];
     }
+    # TODO test!!!
     public function add_employment($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -248,6 +256,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_employment($values, $user_id_for_log)
     {
         $id = $values[0];
@@ -260,6 +269,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function update_employment($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -287,6 +297,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_employments_by_user_id($values)
     {
         $user_id = $values[0];
@@ -304,6 +315,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function add_message($values, $user_id_for_log)
     {
         $user1_id = $values[0];
@@ -323,6 +335,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_messages_by_user_id($values)
     {
         $user_id = $values[0];
@@ -340,6 +353,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function add_organisation($values, $user_id_for_log)
     {
         $name = $values[0];
@@ -356,6 +370,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_organisation($values, $user_id_for_log)
     {
         $id = $values[0];
@@ -368,6 +383,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function update_organisation($values, $user_id_for_log)
     {
         $name = $values[0];
@@ -384,6 +400,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_organisation($values)
     {
         $id = $values[0];
@@ -396,6 +413,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function add_qualification($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -421,6 +439,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_qualification($values, $user_id_for_log)
     {
         $id = $values[0];
@@ -433,6 +452,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function update_qualification($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -458,6 +478,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_qualifications_by_user_id($values)
     {
         $user_id = $values[0];
@@ -475,6 +496,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function get_skill($values)
     {
         $id = $values[0];
@@ -487,6 +509,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function get_skills()
     {
         $sql = "SELECT * FROM Skill";
@@ -502,6 +525,7 @@ class Database
         }
         return [false, "no results"];
     }
+    # TODO test!!!
     public function add_user_organisation($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -520,6 +544,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_user_organisation($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -534,6 +559,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function change_rights($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -550,6 +576,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_user_organisation_by_user_id($values)
     {
         $user_id = $values[0];
@@ -567,6 +594,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function get_user_organisation_by_organisation_id($values)
     {
         $organisation_id = $values[0];
@@ -584,6 +612,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function add_user_user($values, $user_id_for_log)
     {
         $user1_id = $values[0];
@@ -601,6 +630,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_user_user($values, $user_id_for_log)
     {
         $id1 = $values[0];
@@ -615,6 +645,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_user_user_by_user_id($values)
     {
         $id = $values[0];
@@ -632,6 +663,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function add_user_skill($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -648,6 +680,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_user_skill($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -662,6 +695,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_user_skill_by_user_id($values)
     {
         $user_id = $values[0];
@@ -679,6 +713,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function add_vacancy($values, $user_id_for_log)
     {
         $organisation_id = $values[0];
@@ -701,6 +736,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_vacancy($values, $user_id_for_log)
     {
         $id = $values[0];
@@ -713,6 +749,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function update_vacancy($values, $user_id_for_log)
     {
         $organisation_id = $values[0];
@@ -733,6 +770,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_vacancy($values)
     {
         $id = $values[0];
@@ -745,6 +783,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function get_vacancies_by_organisation_id($values)
     {
         $organisation_id = $values[0];
@@ -762,6 +801,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function add_vacancy_skill($values, $user_id_for_log)
     {
         $vacancy_id = $values[0];
@@ -781,6 +821,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_vacancy_skill($values, $user_id_for_log)
     {
         $vacancy_id = $values[0];
@@ -795,6 +836,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_vacancy_skill_by_vacancy_id($values)
     {
         $vacancy_id = $values[0];
@@ -812,6 +854,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function change_required($values, $user_id_for_log)
     {
         $vacancy_id = $values[0];
@@ -829,6 +872,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function add_vacancy_user($values, $user_id_for_log)
     {
         $vacancy_id = $values[0];
@@ -846,6 +890,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function remove_vacancy_user($values, $user_id_for_log)
     {
         $user_id = $values[0];
@@ -860,6 +905,7 @@ class Database
         }
         return [false, $this->connection->error];
     }
+    # TODO test!!!
     public function get_vacancy_user_by_user_id($values)
     {
         $user_id = $values[0];
@@ -877,6 +923,7 @@ class Database
         }
         return [false, "no result for this id"];
     }
+    # TODO test!!!
     public function get_vacancy_user_by_vacancy_id($values)
     {
         $vacancy_id = $values[0];
@@ -894,19 +941,40 @@ class Database
         }
         return [false, "no result for this id"];
     }
-    private function add_log($user_id, $action_type, $operated_on_id=null)
+    # TODO test!!!
+    function add_log($user_id, $action_type, $operated_on_id=null)
     {
         if (!$this->validator->validate_id($user_id)) {return [false, "invalid user1 id"];}
-        if (!$this->validator->validate_id($action_type)) {return [false, "invalid user2 id"];}
-        if (!$this->validator->validate_text($operated_on_id)) {return [false, "invalid text"];}
+        if (!$this->validator->validate_text($action_type)) {return [false, "invalid user2 id"];}
+        if (!$this->validator->validate_id($operated_on_id)) {return [false, "invalid text"];}
         $var_names = "user_id, action_type, operated_on_id";
         $var_values = "$user_id, '$action_type', '$operated_on_id'";
         $sql = "INSERT INTO Log ($var_names) VALUES ($var_values)";
         $this->connection->query($sql);
+        echo ($this->connection->error);
     }
 }
 
+$db = new Database();
+#adding user test
+#$values = ["1975-03-04", "Tom", "Cruise", "male", "5", "ttommdwcm@gmail.com", "123qwert55y", "4", "15", "true"];
+#$result = $db->add_user($values);
 
-//$db = new Database();
+#remove/get user test
+#$result = $db->get_user([8]);
+#var_dump($result);
 
-?>
+
+#login user test
+#$result = $db->login(["johnnnnn@gmail.com", "123qwerty"]);
+#var_dump($result);
+
+#get_city user test
+#for($i=-2; $i<100; $i++)
+#{
+#    $result = $db->get_city([$i]);
+#    var_dump($result);
+#    echo("<br />");
+#    echo("<br />");
+#}
+
