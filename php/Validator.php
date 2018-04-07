@@ -23,15 +23,15 @@ class Validator
         {
             return 0;
         }
-        if ($value_list[2] > 31 || $value_list[2] < 0)
+        if ($value_list[2] > 31 || $value_list[2] < 0 || !$this->validate_id($value_list[2]))
         {
             return 0;
         }
-        if ($value_list[1] > 12 || $value_list[1] < 0)
+        if ($value_list[1] > 12 || $value_list[1] < 0|| !$this->validate_id($value_list[1]))
         {
             return 0;
         }
-        if ($value_list[0] > 3000 || $value_list[0] < 1000)
+        if ($value_list[0] > 3000 || $value_list[0] < 1000|| !$this->validate_id($value_list[3]))
         {
             return 0;
         }
