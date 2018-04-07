@@ -955,7 +955,7 @@ class Database
     }
 }
 
-$db = new Database();
+#$db = new Database();
 #adding user test
 #$values = ["1975-03-04", "Tom", "Cruise", "male", "5", "ttommdwcm@gmail.com", "123qwert55y", "4", "15", "true"];
 #$result = $db->add_user($values);
