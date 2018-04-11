@@ -617,7 +617,6 @@ class Database
     {
         $user1_id = $values[0];
         $user2_id = $values[1];
-        $text = $values[2];
         if (!$this->validator->validate_id($user1_id)) {return [false, "invalid user1 id"];}
         if (!$this->validator->validate_id($user2_id)) {return [false, "invalid user2 id"];}
         $var_names = "user1_id, user2_id";
@@ -641,6 +640,37 @@ class Database
         if ($this->connection->query($sql) === TRUE)
         {
             $this->add_log($user_id_for_log, "remove user_user", $id2);
+            return [true, null];
+        }
+        return [false, $this->connection->error];
+    }
+    public function add_user_user_request($values, $user_id_for_log)
+    {
+        $user1_id = $values[0];
+        $user2_id = $values[1];
+        if (!$this->validator->validate_id($user1_id)) {return [false, "invalid user1 id"];}
+        if (!$this->validator->validate_id($user2_id)) {return [false, "invalid user2 id"];}
+        $var_names = "user_from_id, user_to_id";
+        $var_values = "$user1_id, $user2_id";
+        $sql = "INSERT INTO user_user_request ($var_names) VALUES ($var_values)";
+        if ($this->connection->query($sql) === TRUE)
+        {
+            $this->add_log($user_id_for_log, "add user_user_request", $user2_id);
+            return [true, null];
+        }
+        return [false, $this->connection->error];
+    }
+    # TODO test!!!
+    public function remove_user_user_request($values)
+    {
+        $id1 = $values[0];
+        $id2 = $values[1];
+        if (!$this->validator->validate_id($id1)) {return [false, "invalid id1"];}
+        if (!$this->validator->validate_id($id2)) {return [false, "invalid id2"];}
+        $sql = "DELETE FROM user_user_request WHERE (user_from_id=$id1 AND user_to_id=$id2) OR (user_to_id=$id2 AND user_from_id=$id1)";
+        if ($this->connection->query($sql) === TRUE)
+        {
+            $this->add_log($id1, "remove user_user_connection", $id2);
             return [true, null];
         }
         return [false, $this->connection->error];
